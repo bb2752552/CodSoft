@@ -1,0 +1,85 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+struct Book {
+    string title;
+    string author;
+    int year;
+    bool available;
+};
+
+class Library {
+private:
+    vector<Book> books;
+
+public:
+    void addBook(const Book& book) {
+        books.push_back(book);
+    }
+
+    void displayBooks() {
+        if (books.empty()) {
+            cout << "No books available." << endl;
+        } else {
+            cout << "Books available in the library:" << endl;
+            for (const auto& book : books) {
+                cout << "Title: " << book.title << ", Author: " << book.author << ", Year: " << book.year;
+                if (book.available) {
+                    cout << " (Available)" << endl;
+                } else {
+                    cout << " (Not Available)" << endl;
+                }
+            }
+        }
+    }
+
+    void borrowBook(const string& title) {
+        for (auto& book : books) {
+            if (book.title == title && book.available) {
+                book.available = false;
+                cout << "You have borrowed the book: " << title << endl;
+                return;
+            }
+        }
+        cout << "Book not found or not available." << endl;
+    }
+
+    void returnBook(const string& title) {
+        for (auto& book : books) {
+            if (book.title == title && !book.available) {
+                book.available = true;
+                cout << "You have returned the book: " << title << endl;
+                return;
+            }
+        }
+        cout << "Book not found or already available." << endl;
+    }
+};
+
+int main() {
+    Library library;
+
+    Book book1 = { "The Great Gatsby", "F. Scott Fitzgerald", 1925, true };
+    Book book2 = { "To Kill a Mockingbird", "Harper Lee", 1960, false };
+    Book book3 = { "1984", "George Orwell", 1949, true };
+
+    library.addBook(book1);
+    library.addBook(book2);
+    library.addBook(book3);
+
+    library.displayBooks();
+
+    library.borrowBook("To Kill a Mockingbird");
+    library.borrowBook("1984");
+
+    library.displayBooks();
+
+    library.returnBook("To Kill a Mockingbird");
+
+    library.displayBooks();
+
+    return 0;
+}
